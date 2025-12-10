@@ -18,9 +18,8 @@ Testable, simulatable, and already matches MEG/fMRI entropy, microstate transiti
 ### Live site
 → https://codingguy1337.github.io/Image-Dynamics-Theory/
 
-### Whitepaper (2-page PDF with equations)
-→ [Image_Dynamics_Theory_Whitepaper_Dec2025.pdf](Image_Dynamics_Theory_Whitepaper_Dec2025.pdf)
-
+### Whitepaper (2-page PDF with 
+→ [Image Dynamics Theory Whitepaper (Dec 2025)](image_dynamics_theory.pdf)
 ### One-sentence summary
 “Conscious experience is the moment-to-moment low-dimensional projection of a high-dimensional neural trajectory moving on a liminality-controlled attractor landscape.”
 
