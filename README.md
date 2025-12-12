@@ -1,26 +1,36 @@
 # Image Dynamics Theory
 
-**A new geometric-dynamical model of consciousness**  
-Anthony J. – University of Arkansas – anthonyj@uark.edu
+**Author:** Anthony Johnson  
+**Status:** Draft / Ongoing theoretical research  
+**License:** CC BY-NC 4.0 (Non-commercial use only)
 
-> Consciousness is not a spotlight.  
-> It is a movie made of glowing disks.
+## Overview
+Image Dynamics Theory proposes that cognition can be modeled as the relaxation of a structured internal state within a high-dimensional latent space under competing constraints. Rather than treating intelligence as a feedforward or token-generating process, this framework describes thinking as an iterative dynamical process that minimizes internal incoherence across perception, prediction, action, and relational structure.
 
-Every few milliseconds the brain projects a thin, low-dimensional **disk** (“slice”) from a hidden high-dimensional movie.  
-That disk is your felt “now”.
+The theory is metaphysical in origin but formally expressed, with the intent that it can be implemented, simulated, and empirically tested.
 
-- Tilt of the disk → cognitive mode  
-- Size of the disk → mental energy / resources  
-- Liminality (L) → single control knob that flattens memory valleys, expands reachable space, and drives creative/psychedelic states
+## Core Concepts
+- Latent cognitive state represented as a structured vector field
+- Energy-based formulation governing internal consistency
+- Iterative relaxation dynamics ("microslices") as cognition
+- Semantic meaning as direction in latent space
+- Action commitment as magnitude (radius) of projected state
+- Emotion and affect as control parameters (e.g. liminality, noise, gain)
+- Language and reflection as readouts of stabilized internal states
 
-Testable, simulatable, and already matches MEG/fMRI entropy, microstate transitions, and psychedelic data.
+## Repository Contents
+This repository contains theoretical documents, conceptual notes, and early structural definitions related to Image Dynamics Theory. The work is ongoing and should be considered a living framework rather than a finalized model.
 
-### Live site
-→ https://codingguy1337.github.io/Image-Dynamics-Theory/
+See `index.md` for a structured overview of the contents.
 
-### Whitepaper (2-page PDF with 
-→ [Image Dynamics Theory Whitepaper (Dec 2025)](image_dynamics_theory.pdf)
-### One-sentence summary
-“Conscious experience is the moment-to-moment low-dimensional projection of a high-dimensional neural trajectory moving on a liminality-controlled attractor landscape.”
+## Intended Use
+This work is shared for research, educational, and non-commercial purposes. Commercial use, including integration into proprietary systems or paid services, requires explicit permission from the author.
 
-2025 ongoing independent research program
+## Status
+This project is in an early-to-mid theoretical stage. Empirical validation, simulations, and full implementations are future work.
+
+## Citation
+If you reference or build upon this work, please cite the repository or any associated preprint authored by Anthony Johnson.
+
+## Contact
+For academic discussion or licensing inquiries, contact the author via GitHub.
