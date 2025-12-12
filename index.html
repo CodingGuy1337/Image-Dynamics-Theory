@@ -3,811 +3,776 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Image Dynamics Theory v1</title>
-  <meta name="description" content="Image Dynamics Theory explained through multiple lenses: intuitive, metaphysical, mathematical/code, and neuroscience. Includes definitions and connections." />
-
+  <meta name="description" content="Image Dynamics Theory: a unifying latent state dynamics view of cognition and AI." />
+  <title>Image Dynamics Theory</title>
   <style>
     :root{
-      --bg:#0b0f17;
-      --panel:#0f172a;
-      --panel2:#0c1324;
-      --text:#e5e7eb;
-      --muted:#9ca3af;
-      --faint:#64748b;
-      --line:rgba(148,163,184,.18);
-      --accent:#7c3aed;
-      --accent2:#22c55e;
-      --warn:#f59e0b;
-      --danger:#ef4444;
-      --shadow: 0 18px 60px rgba(0,0,0,.35);
-      --radius: 18px;
+      --bg:#0b0f14;
+      --panel:#101823;
+      --panel2:#0f1722;
+      --text:#e7eef7;
+      --muted:#a8b3c2;
+      --link:#7cc7ff;
+      --accent:#8cffc1;
+      --warn:#ffcc7a;
+      --danger:#ff7aa2;
+      --border:rgba(255,255,255,.08);
+      --shadow: 0 12px 30px rgba(0,0,0,.35);
       --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
       --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      --radius: 14px;
+      --max: 1100px;
     }
 
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
       margin:0;
-      font-family:var(--sans);
-      background:
-        radial-gradient(1200px 800px at 10% 0%, rgba(124,58,237,.22), transparent 60%),
-        radial-gradient(1000px 700px at 90% 10%, rgba(34,197,94,.18), transparent 60%),
-        radial-gradient(900px 650px at 50% 110%, rgba(245,158,11,.10), transparent 55%),
-        var(--bg);
+      font-family: var(--sans);
       color:var(--text);
-      line-height:1.55;
+      line-height:1.6;
+      background-color: var(--bg);
+      text-rendering: optimizeLegibility;
     }
 
-    a{color:inherit}
-    .wrap{
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 28px 18px 70px;
+    /* Static large backdrop that does not get visually chopped */
+    body::before{
+      content:"";
+      position:fixed;
+      inset:-32vmax;
+      z-index:-1;
+      pointer-events:none;
+      background:
+        radial-gradient(1250px 980px at 16% 10%, rgba(124,199,255,.14), transparent 58%),
+        radial-gradient(1380px 1020px at 88% 28%, rgba(140,255,193,.12), transparent 60%),
+        radial-gradient(980px 860px at 52% 96%, rgba(255,204,122,.09), transparent 58%),
+        radial-gradient(1900px 1500px at 55% 45%, rgba(255,255,255,.05), transparent 64%),
+        linear-gradient(180deg, rgba(11,15,20,1), rgba(11,15,20,.97));
+      transform: translateZ(0);
+      will-change: transform;
+      filter: saturate(112%);
     }
+
+    a{color:var(--link); text-decoration:none}
+    a:hover{text-decoration:underline}
+
+    .wrap{max-width:var(--max); margin:0 auto; padding:28px 18px 80px}
 
     header{
+      position:sticky; top:0; z-index:10;
+      backdrop-filter: blur(10px);
+      background: linear-gradient(to bottom, rgba(11,15,20,.92), rgba(11,15,20,.72));
+      border-bottom:1px solid var(--border);
+    }
+    .topbar{
+      max-width:var(--max);
+      margin:0 auto;
+      padding:14px 18px;
       display:flex;
-      gap:16px;
-      align-items:flex-start;
+      align-items:center;
+      gap:14px;
       justify-content:space-between;
-      margin: 6px 0 18px;
+    }
+    .brand{
+      display:flex; gap:10px; align-items:center;
+      min-width:240px;
+    }
+    .badge{
+      font-family:var(--mono);
+      font-size:12px;
+      color:rgba(0,0,0,.85);
+      background: linear-gradient(135deg, var(--accent), #b0ffef);
+      padding:4px 8px;
+      border-radius:999px;
+      letter-spacing:.06em;
+      text-transform:uppercase;
     }
     .title{
-      display:flex; flex-direction:column; gap:6px;
+      font-weight:700;
+      letter-spacing:.2px;
     }
-    h1{
-      margin:0;
-      font-size: 30px;
-      letter-spacing: .2px;
+    nav{
+      display:flex; gap:10px; flex-wrap:wrap;
+      justify-content:flex-end;
     }
-    .subtitle{
+    nav a{
+      font-size:14px;
       color:var(--muted);
-      max-width: 70ch;
-      margin:0;
-      font-size: 14px;
+      padding:8px 10px;
+      border-radius:10px;
+      border:1px solid transparent;
     }
-    .pillbar{
-      display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;
-      margin-top: 2px;
-    }
-    .pill{
-      border:1px solid var(--line);
-      background: rgba(15,23,42,.55);
-      padding: 8px 10px;
-      border-radius: 999px;
-      color:var(--muted);
-      font-size: 12px;
+    nav a:hover{
+      color:var(--text);
+      border-color:var(--border);
+      background:rgba(255,255,255,.03);
       text-decoration:none;
-      transition: transform .08s ease, border-color .15s ease, background .15s ease;
-      user-select:none;
     }
-    .pill:hover{ transform: translateY(-1px); border-color: rgba(124,58,237,.45); background: rgba(15,23,42,.75);}
-    .pill.active{ color: var(--text); border-color: rgba(124,58,237,.7); }
 
-    .grid{
+    .hero{
+      margin-top:30px;
       display:grid;
-      grid-template-columns: 1.2fr .8fr;
-      gap: 16px;
+      grid-template-columns: 1.35fr .95fr;
+      gap:18px;
       align-items:start;
     }
     @media (max-width: 920px){
-      .grid{ grid-template-columns:1fr; }
-      .pillbar{ justify-content:flex-start; }
+      .hero{grid-template-columns:1fr}
+      .brand{min-width:auto}
+      nav{justify-content:flex-start}
     }
 
     .card{
-      background: linear-gradient(180deg, rgba(15,23,42,.72), rgba(12,19,36,.72));
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(16,24,35,.88), rgba(15,23,34,.76));
+      border:1px solid var(--border);
+      border-radius:var(--radius);
       box-shadow: var(--shadow);
-      overflow:hidden;
-    }
-    .card .pad{ padding: 18px; }
-    .card h2{
-      margin: 0 0 8px;
-      font-size: 18px;
-      letter-spacing: .2px;
-    }
-    .card h3{
-      margin: 18px 0 8px;
-      font-size: 15px;
-      color: var(--text);
-    }
-    .muted{ color: var(--muted); }
-    .faint{ color: var(--faint); }
-
-    .hero{
-      border-bottom: 1px solid var(--line);
-      background:
-        radial-gradient(700px 420px at 20% 20%, rgba(124,58,237,.18), transparent 70%),
-        radial-gradient(700px 420px at 80% 10%, rgba(34,197,94,.12), transparent 70%),
-        rgba(2,6,23,.25);
+      padding:18px;
     }
 
-    .callouts{
+    .hero h1{
+      margin:0 0 6px;
+      font-size:34px;
+      line-height:1.15;
+      letter-spacing:-.02em;
+    }
+    .hero p{
+      margin:10px 0 0;
+      color:var(--muted);
+      font-size:16px;
+    }
+
+    .pillrow{
+      display:flex; gap:10px; flex-wrap:wrap;
+      margin-top:14px;
+    }
+    .pill{
+      font-size:12px;
+      font-family:var(--mono);
+      color:rgba(255,255,255,.85);
+      border:1px solid var(--border);
+      padding:6px 10px;
+      border-radius:999px;
+      background:rgba(255,255,255,.02);
+    }
+
+    .cta{
+      display:flex; gap:10px; flex-wrap:wrap;
+      margin-top:16px;
+    }
+    .btn{
+      display:inline-block;
+      font-weight:600;
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.03);
+      color:var(--text);
+      text-decoration:none;
+    }
+    .btn.primary{
+      border-color: rgba(140,255,193,.25);
+      background: rgba(140,255,193,.10);
+    }
+    .btn:hover{background:rgba(255,255,255,.06); text-decoration:none}
+
+    .note{
+      margin-top:12px;
+      font-size:13px;
+      color:var(--muted);
+    }
+
+    section{margin-top:18px}
+    section h2{
+      margin:0 0 10px;
+      font-size:20px;
+      letter-spacing:-.01em;
+    }
+    .subhead{
+      margin:0;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .grid2{
       display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-top: 14px;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
     }
     @media (max-width: 920px){
-      .callouts{ grid-template-columns:1fr; }
-    }
-    .callout{
-      border: 1px solid var(--line);
-      background: rgba(2,6,23,.18);
-      border-radius: 14px;
-      padding: 12px;
-      min-height: 88px;
-    }
-    .badge{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      font-size: 12px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      border:1px solid rgba(124,58,237,.45);
-      color: var(--text);
-      background: rgba(124,58,237,.12);
-    }
-    .dot{
-      width:7px; height:7px; border-radius:50%;
-      background: var(--accent);
-      box-shadow: 0 0 0 4px rgba(124,58,237,.18);
+      .grid2{grid-template-columns:1fr}
     }
 
-    .toc{
-      display:flex; flex-direction:column; gap:8px;
-      padding: 14px;
-    }
-    .toc a{
-      text-decoration:none;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-      padding: 10px 12px;
-      border-radius: 12px;
-      border: 1px solid transparent;
-      color: var(--muted);
-      background: rgba(2,6,23,.16);
-      transition: background .15s ease, border-color .15s ease, transform .08s ease;
-    }
-    .toc a:hover{
-      color: var(--text);
-      border-color: rgba(148,163,184,.22);
-      background: rgba(2,6,23,.26);
-      transform: translateY(-1px);
-    }
-    .toc a strong{ color: var(--text); font-weight: 600; }
-    .k{ font-family: var(--mono); color: rgba(229,231,235,.85); font-size: 12px; }
-
-    section{
-      scroll-margin-top: 18px;
-      padding: 18px;
-      border-top: 1px solid var(--line);
-    }
-    section:first-of-type{ border-top: none; }
-    .section-title{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      margin:0 0 8px;
-    }
-    .section-title h2{ margin:0; }
-
-    .mini{
-      font-size: 12px;
-      color: var(--muted);
-    }
-
-    .two{
+    .kvs{
       display:grid;
       grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-top: 10px;
+      gap:12px;
+      margin-top:10px;
     }
-    @media (max-width: 920px){
-      .two{ grid-template-columns: 1fr; }
+    @media (max-width: 620px){
+      .kvs{grid-template-columns:1fr}
     }
-
-    .panel{
-      border:1px solid var(--line);
-      background: rgba(2,6,23,.18);
-      border-radius: 14px;
-      padding: 12px;
+    .kv{
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:12px;
+      background:rgba(255,255,255,.02);
     }
-    .panel h4{ margin: 0 0 6px; font-size: 13px; color: var(--text); }
-    .panel p{ margin: 0; color: var(--muted); font-size: 13px; }
-
-    .code{
-      font-family: var(--mono);
-      font-size: 12px;
-      background: rgba(0,0,0,.25);
-      border: 1px solid rgba(148,163,184,.18);
-      border-radius: 14px;
-      padding: 12px;
-      overflow:auto;
-      white-space: pre;
-      color: rgba(229,231,235,.92);
+    .kv .k{
+      font-family:var(--mono);
+      font-size:12px;
+      color:rgba(255,255,255,.75);
+      text-transform:uppercase;
+      letter-spacing:.08em;
     }
-
-    .eq{
-      margin: 10px 0;
-      padding: 10px 12px;
-      border-left: 3px solid rgba(124,58,237,.75);
-      background: rgba(124,58,237,.08);
-      border-radius: 12px;
-      font-family: var(--mono);
-      font-size: 12.5px;
-      overflow:auto;
-    }
+    .kv .v{margin-top:6px; color:var(--muted); font-size:14px}
 
     table{
       width:100%;
-      border-collapse: separate;
-      border-spacing: 0;
-      margin-top: 10px;
+      border-collapse:separate;
+      border-spacing:0;
       overflow:hidden;
-      border-radius: 14px;
-      border:1px solid var(--line);
-      background: rgba(2,6,23,.16);
+      border-radius:12px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.01);
     }
-    th,td{
-      padding: 10px 10px;
-      border-bottom: 1px solid var(--line);
-      vertical-align: top;
+    th, td{
       text-align:left;
-      font-size: 13px;
+      padding:12px 12px;
+      border-bottom:1px solid var(--border);
+      vertical-align:top;
+      font-size:14px;
     }
-    th{ color: rgba(229,231,235,.9); font-weight: 600; background: rgba(15,23,42,.35); }
-    tr:last-child td{ border-bottom: none; }
-    td{ color: var(--muted); }
-
-    .footer{
-      margin-top: 18px;
-      color: var(--muted);
-      font-size: 12px;
-      display:flex;
-      justify-content:space-between;
-      gap:12px;
-      flex-wrap:wrap;
-      padding: 14px 18px;
-      border-top: 1px solid var(--line);
-      background: rgba(2,6,23,.20);
-      border-radius: 0 0 var(--radius) var(--radius);
-    }
-
-    .btnrow{
-      display:flex; gap:10px; flex-wrap:wrap;
-      margin-top: 12px;
-    }
-    .btn{
-      text-decoration:none;
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding: 10px 12px;
-      border-radius: 12px;
-      border: 1px solid rgba(148,163,184,.22);
-      background: rgba(2,6,23,.22);
-      color: var(--text);
-      font-size: 13px;
-      transition: transform .08s ease, border-color .15s ease, background .15s ease;
-    }
-    .btn:hover{ transform: translateY(-1px); border-color: rgba(124,58,237,.55); background: rgba(2,6,23,.32); }
-    .btn .chip{
-      font-family: var(--mono);
-      font-size: 11px;
-      color: rgba(229,231,235,.85);
-      padding: 2px 8px;
-      border-radius: 999px;
-      border: 1px solid rgba(148,163,184,.18);
-      background: rgba(0,0,0,.15);
-    }
-    .hr{ height:1px; background: var(--line); margin: 14px 0; }
-    .quote{
-      margin: 10px 0 0;
-      padding: 10px 12px;
-      border-left: 3px solid rgba(34,197,94,.7);
-      background: rgba(34,197,94,.08);
-      border-radius: 12px;
-      color: rgba(229,231,235,.88);
-      font-size: 13px;
-    }
-
-    .smallcaps{
-      letter-spacing:.12em;
+    th{
+      font-family:var(--mono);
+      font-size:12px;
+      color:rgba(255,255,255,.78);
+      letter-spacing:.08em;
       text-transform:uppercase;
-      font-size: 11px;
-      color: rgba(229,231,235,.7);
+      background:rgba(255,255,255,.03);
     }
+    tr:last-child td{border-bottom:none}
+
+    code, pre{font-family:var(--mono); font-size:13px}
+    pre{
+      background:rgba(0,0,0,.25);
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:12px;
+      overflow:auto;
+      margin:10px 0 0;
+    }
+
+    .callout{
+      border:1px solid rgba(255,204,122,.25);
+      background: rgba(255,204,122,.08);
+      border-radius:12px;
+      padding:12px;
+      color: rgba(255,255,255,.92);
+    }
+    .callout b{color: rgba(255,255,255,.98)}
+
+    .callout.cool{
+      border:1px solid rgba(124,199,255,.22);
+      background: rgba(124,199,255,.07);
+    }
+    .callout.good{
+      border:1px solid rgba(140,255,193,.22);
+      background: rgba(140,255,193,.07);
+    }
+
+    .twocol{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+      margin-top:12px;
+    }
+    @media (max-width: 760px){
+      .twocol{grid-template-columns:1fr}
+    }
+
+    footer{
+      margin-top:26px;
+      color:var(--muted);
+      font-size:13px;
+      border-top:1px solid var(--border);
+      padding-top:18px;
+    }
+    .footerRow{
+      display:flex;
+      gap:12px;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .smalllinks a{color:var(--muted)}
+    .smalllinks a:hover{color:var(--text)}
   </style>
 </head>
 
 <body>
-  <div class="wrap">
-
-    <header>
-      <div class="title">
-        <h1>Image Dynamics Theory v1</h1>
-        <p class="subtitle">
-          One idea, multiple lenses. A theory of cognition as a geometric process: internal “image-like” states evolve by minimizing constraint energy across perception, prediction, action, and coherence.
-        </p>
+  <header>
+    <div class="topbar">
+      <div class="brand">
+        <span class="badge">IDT</span>
+        <div class="title">Image Dynamics Theory</div>
       </div>
-
-      <nav class="pillbar" aria-label="Quick links">
-        <a class="pill" href="#overview">Overview</a>
-        <a class="pill" href="#kaleidoscope">Kaleidoscope</a>
-        <a class="pill" href="#metaphysical">Metaphysical</a>
-        <a class="pill" href="#mathcode">Math + Code</a>
-        <a class="pill" href="#neuroscience">Neuroscience</a>
-        <a class="pill" href="#definitions">Definitions</a>
-        <a class="pill" href="#connections">Connections</a>
+      <nav>
+        <a href="#overview">Overview</a>
+        <a href="#definitions">Definitions</a>
+        <a href="#loops">Two Loops</a>
+        <a href="#mapping">Mappings</a>
+        <a href="#crosswalk">Cross Lens Table</a>
+        <a href="#mathcode">Math and Code</a>
+        <a href="#predictions">Predictions</a>
+        <a href="#build">Implementation</a>
       </nav>
-    </header>
+    </div>
+  </header>
 
-    <div class="grid">
+  <main class="wrap">
+    <div class="hero">
       <div class="card">
-        <div class="hero pad" id="overview">
-          <div class="badge"><span class="dot"></span> Core claim</div>
-          <h2 style="margin-top:12px">Cognition is constrained motion in a latent space</h2>
-          <p class="muted" style="margin:0">
-            The mind can be modeled as a structured latent state <span class="k">Z</span> that updates by reducing a global energy
-            functional. Each “constraint” is a term that tries to keep something consistent: what you see, what you expect next,
-            what you intend, how your internal parts cohere, and how you revise your priorities after outcomes.
-          </p>
+        <h1>From Knowing to Understanding</h1>
+        <p>
+          Many modern systems know a lot and still fail at coherent prediction, causal stability, and adaptive planning.
+          IDT proposes a simple center of gravity: a compact latent state <b>Z</b>, refined through an objective that measures
+          mismatch between expectation and experience, under constraints, across time.
+        </p>
 
-          <div class="callouts">
-            <div class="callout">
-              <div class="smallcaps">State</div>
-              <div style="margin-top:6px; color:rgba(229,231,235,.92); font-weight:600">Z = structured fields</div>
-              <div class="muted" style="margin-top:6px; font-size:13px">Perceptual + semantic + relational + action + slow/fast context.</div>
-            </div>
-            <div class="callout">
-              <div class="smallcaps">Dynamics</div>
-              <div style="margin-top:6px; color:rgba(229,231,235,.92); font-weight:600">Energy minimization</div>
-              <div class="muted" style="margin-top:6px; font-size:13px">Update is gradient descent on constraint mismatch.</div>
-            </div>
-            <div class="callout">
-              <div class="smallcaps">Reflection</div>
-              <div style="margin-top:6px; color:rgba(229,231,235,.92); font-weight:600">Decode from relaxed state</div>
-              <div class="muted" style="margin-top:6px; font-size:13px">“Thought” is a readout of state shaped by outcomes.</div>
-            </div>
-          </div>
-
-          <div class="btnrow">
-            <a class="btn" href="#definitions"><span class="chip">Start</span> Definitions</a>
-            <a class="btn" href="#mathcode"><span class="chip">Core</span> Math + Code lens</a>
-            <a class="btn" href="#connections"><span class="chip">Map</span> Connections table</a>
-          </div>
-
-          <div class="quote">
-            Practical framing: you’re not training a chatbot. You’re shaping a geometry so that “what happened” pulls the state into a region that decodes into an honest reflection.
-          </div>
+        <div class="pillrow" aria-label="key phrases">
+          <span class="pill">latent state Z</span>
+          <span class="pill">energy or error</span>
+          <span class="pill">prediction coherence</span>
+          <span class="pill">goal shaped inference</span>
+          <span class="pill">planning and control</span>
         </div>
 
-        <section id="kaleidoscope">
-          <div class="section-title">
-            <h2>Kaleidoscope lens</h2>
-            <div class="mini">For the below-average-intellect path, without insulting anyone too much</div>
-          </div>
+        <div class="cta">
+          <a class="btn primary" href="#mathcode">Jump to Math and Code</a>
+          <a class="btn" href="#build">Jump to Implementation</a>
+        </div>
 
-          <p class="muted">
-            Imagine your mind is a kaleidoscope. The colored pieces are your memories, sensations, and assumptions. The mirror angles are your current “lens” on life. When you twist it,
-            the same pieces form a new pattern.
-          </p>
-
-          <div class="two">
-            <div class="panel">
-              <h4>What is a “slice”?</h4>
-              <p>
-                A slice is the current pattern the kaleidoscope shows. It’s what you’re “in” right now: mood, attention, interpretation, what feels real.
-              </p>
-            </div>
-            <div class="panel">
-              <h4>What is “liminality”?</h4>
-              <p>
-                Liminality is the looseness while the pattern is changing. Not stable yet, not broken either. More possibility, more noise.
-              </p>
-            </div>
-          </div>
-
-          <div class="two">
-            <div class="panel">
-              <h4>Why goals aren’t enough</h4>
-              <p>
-                Sometimes you don’t have a goal. You’re just reacting, processing, or wandering. The “geometry” still moves: your state updates based on what happened and how it felt.
-              </p>
-            </div>
-            <div class="panel">
-              <h4>Why reflection matters</h4>
-              <p>
-                A reflection is the story your mind generates after the twist. It’s how you turn “pattern change” into learning, without needing a perfect plan.
-              </p>
-            </div>
-          </div>
-
-          <p class="muted">
-            In this lens: the system learns by seeing lots of “twists” and gradually preferring twists that lead to stable, coherent patterns instead of chaotic ones.
-          </p>
-        </section>
-
-        <section id="metaphysical">
-          <div class="section-title">
-            <h2>Metaphysical lens</h2>
-            <div class="mini">Allegory-friendly, but still anchored to the same variables</div>
-          </div>
-
-          <p class="muted">
-            Treat <span class="k">Z</span> as an inner temple made of chambers. Perception, meaning, relationships, and intention are rooms connected by corridors.
-            Your experience is the flow of attention through the structure.
-          </p>
-
-          <div class="two">
-            <div class="panel">
-              <h4>Harmony</h4>
-              <p>
-                Harmony is when the chambers agree: what you perceive, what you expect, and what you intend don’t fight each other. The energy is low.
-              </p>
-            </div>
-            <div class="panel">
-              <h4>Dissonance</h4>
-              <p>
-                Dissonance is internal contradiction: the rooms disagree. Something “feels off.” Energy rises and the system seeks a new configuration.
-              </p>
-            </div>
-          </div>
-
-          <div class="two">
-            <div class="panel">
-              <h4>Liminality</h4>
-              <p>
-                Liminality is the threshold space. Rules loosen. Priors soften. More states become reachable, including dangerous ones.
-              </p>
-            </div>
-            <div class="panel">
-              <h4>Coherence</h4>
-              <p>
-                Coherence is the ability to keep a stable thread of meaning while updating from reality. It’s not rigidity. It’s structured flexibility.
-              </p>
-            </div>
-          </div>
-
-          <p class="muted">
-            In this lens: “spiritual struggle” maps cleanly to energy mismatch and reconfiguration. The metaphor is optional. The mechanics aren’t.
-          </p>
-        </section>
-
-        <section id="mathcode">
-          <div class="section-title">
-            <h2>Math + Code lens</h2>
-            <div class="mini">What’s actually happening when you train and why reflection improves</div>
-          </div>
-
-          <p class="muted">
-            The model has a structured latent state <span class="k">Z</span> and an energy functional <span class="k">E(Z; x_t, x_{t+1}, y)</span>.
-            A single “step” relaxes <span class="k">Z</span> by descending the energy landscape, so the state becomes compatible with:
-            (a) the current input, (b) the next outcome, and (c) the intention signal.
-          </p>
-
-          <div class="eq">
-(1)   Φ(Z; x_t, x_{t+1}, y) = Σ_i w_i · ℰ_i(Z, x_t, x_{t+1}, y)
-
-(2)   Z_{t+1} = Z_t − η · ∇_Z Φ(Z_t; x_t, x_{t+1}, y)
-          </div>
-
-          <p class="muted">
-            “Learning” is two separate things that people love to confuse:
-          </p>
-
-          <div class="two">
-            <div class="panel">
-              <h4>(A) Geometric relaxation (inference-time)</h4>
-              <p>
-                Every batch performs energy descent. That changes the state <span class="k">Z</span>, not the parameters. It’s the model “thinking.”
-              </p>
-            </div>
-            <div class="panel">
-              <h4>(B) Parameter updates (training-time)</h4>
-              <p>
-                Backprop updates encoder/decoder/world/goal weights so that future relaxations land in better regions. This is the model “learning.”
-              </p>
-            </div>
-          </div>
-
-          <div class="hr"></div>
-
-          <p class="muted">
-            Reflection becomes real (not templated) when the semantic state encodes episode structure instead of shallow word overlap.
-            To encourage that, you need constraints that force the state to actually *carry* causality.
-          </p>
-
-          <div class="two">
-            <div class="panel">
-              <h4>What you already have</h4>
-              <p>
-                <span class="k">L_world</span> aligns predicted next-embedding to outcome embedding.
-                <span class="k">L_dec</span> trains the decoder to express latent state as text.
-                <span class="k">L_goal</span> shapes goal-update geometry.
-              </p>
-            </div>
-            <div class="panel">
-              <h4>What to add (next)</h4>
-              <p>
-                Episode-level reflection head: summarize 3–7 steps. Contrastive loss: match reflection to correct episode vs negatives. Term attribution logging: show which energy terms drove the update.
-              </p>
-            </div>
-          </div>
-
-          <div class="code" aria-label="Pseudo-code">
-# One training example (conceptual)
-x_t     = encode(situation or observation)
-x_tp1   = encode(actual_outcome or next_state)
-y       = domain_emb + goal_emb(init_goal)
-
-Z       = init_state()
-Z*      = relax(Z, x_t, x_tp1, y)      # gradient descent on energy
-
-x_hat   = world_predict(Z*, y)
-loss    = mse(x_hat, x_tp1) + ce(decode(Z*), reflection) + mse(goal_update(Z*), revised_goal)
-
-update_parameters(loss)
-          </div>
-        </section>
-
-        <section id="neuroscience">
-          <div class="section-title">
-            <h2>Neuroscience lens</h2>
-            <div class="mini">Mapping the same variables to plausible brain-like interpretations</div>
-          </div>
-
-          <p class="muted">
-            You can interpret the system as a stylized predictive processing network:
-            perception aligns with sensory evidence, semantics approximates higher-level inference, and energy minimization resembles iterative inference under constraints.
-          </p>
-
-          <div class="two">
-            <div class="panel">
-              <h4>Prediction error</h4>
-              <p>
-                Energy terms act like prediction errors. When mismatch rises, the system updates internal state to reduce error (or changes its “priors,” depending on structure).
-              </p>
-            </div>
-            <div class="panel">
-              <h4>Attention / precision</h4>
-              <p>
-                Your “angle of focus” idea maps to precision weighting: some channels are amplified, others ignored. That changes which errors dominate updates.
-              </p>
-            </div>
-          </div>
-
-          <div class="two">
-            <div class="panel">
-              <h4>Slow vs fast context</h4>
-              <p>
-                Slow fields behave like context/set; fast fields behave like transient fluctuations. Their coupling encourages stability without freezing.
-              </p>
-            </div>
-            <div class="panel">
-              <h4>Goal revision</h4>
-              <p>
-                Revised goals resemble post-hoc reappraisal: the system updates what “this episode was about” after seeing consequences.
-              </p>
-            </div>
-          </div>
-
-          <p class="muted">
-            Importantly: the theory stays computational. You’re not claiming neurons literally compute your exact energy. You’re building a useful abstraction that can generate testable predictions.
-          </p>
-        </section>
-
-        <section id="definitions">
-          <div class="section-title">
-            <h2>Definitions</h2>
-            <div class="mini">Same words, grounded across human experience + geometry + neuroscience</div>
-          </div>
-
-          <table>
-            <thead>
-              <tr>
-                <th style="width:18%">Term</th>
-                <th>Human experience</th>
-                <th>Geometry / model</th>
-                <th>Neuroscience analogy</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><strong>Liminality</strong></td>
-                <td>That “in-between” feeling: unstable, open, uncertain, possibility + risk.</td>
-                <td>Higher transition variance; more reachable states; weaker priors; larger exploration radius.</td>
-                <td>Altered precision weighting; destabilized attractors; increased state entropy.</td>
-              </tr>
-              <tr>
-                <td><strong>Harmony</strong></td>
-                <td>Things click. Effort feels aligned. Low internal friction.</td>
-                <td>Low energy; constraints satisfied; fields agree.</td>
-                <td>Lower prediction error; stable synchronization across networks.</td>
-              </tr>
-              <tr>
-                <td><strong>Dissonance</strong></td>
-                <td>Something is “off.” You feel tension or contradiction.</td>
-                <td>High energy in one or more terms; competing constraints.</td>
-                <td>High prediction error; conflict monitoring; reconfiguration demand.</td>
-              </tr>
-              <tr>
-                <td><strong>Coherence</strong></td>
-                <td>A stable sense-making thread that adapts when reality changes.</td>
-                <td>Consistency across time; relational structure holds while updates occur.</td>
-                <td>Network integration; flexible coupling; stable-yet-adaptive attractors.</td>
-              </tr>
-              <tr>
-                <td><strong>Radius</strong></td>
-                <td>How far your mind can roam without losing itself.</td>
-                <td>Reachable region in latent space from current state; exploration range.</td>
-                <td>Dynamic repertoire size; exploration-exploitation balance.</td>
-              </tr>
-              <tr>
-                <td><strong>Semantics</strong></td>
-                <td>What a situation “means” to you, not just what it is.</td>
-                <td>Semantic field in Z; compressed representation of implications/expectations.</td>
-                <td>Higher-level inference; association networks; conceptual abstraction.</td>
-              </tr>
-              <tr>
-                <td><strong>Slice</strong></td>
-                <td>The current mode you’re in: lens, mood, stance, interpretation.</td>
-                <td>A low-dimensional projection of Z dominating behavior and decoding.</td>
-                <td>Brain state / mode: task set, DMN/attention balance, control regime.</td>
-              </tr>
-              <tr>
-                <td><strong>Latent space</strong></td>
-                <td>The invisible landscape your mind navigates.</td>
-                <td>The representational manifold where Z lives and moves.</td>
-                <td>Population activity geometry; manifold learning interpretations.</td>
-              </tr>
-              <tr>
-                <td><strong>Reflection</strong></td>
-                <td>Inner narration that updates how you interpret yourself and events.</td>
-                <td>Decoder readout of relaxed semantic state shaped by outcome and constraints.</td>
-                <td>Reappraisal; memory consolidation; meta-cognitive commentary.</td>
-              </tr>
-            </tbody>
-          </table>
-
-          <p class="muted" style="margin-top:12px">
-            Add more terms as your model grows: <span class="k">entropy</span>, <span class="k">precision</span>, <span class="k">orientation</span>, <span class="k">phase</span>, <span class="k">relational heads</span>.
-            The point is consistency: one set of variables, many ways to explain them.
-          </p>
-        </section>
-
-        <section id="connections">
-          <div class="section-title">
-            <h2>Connections</h2>
-            <div class="mini">Translate the same mechanics across lenses without changing claims</div>
-          </div>
-
-          <table>
-            <thead>
-              <tr>
-                <th style="width:26%">Model variable / mechanism</th>
-                <th>Plain meaning</th>
-                <th>Metaphysical framing</th>
-                <th>Neuro/ML framing</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><strong>Energy term dominance</strong></td>
-                <td>Which mismatch is “loudest” right now</td>
-                <td>Which inner chamber is in conflict</td>
-                <td>Largest prediction error / constraint violation</td>
-              </tr>
-              <tr>
-                <td><strong>Relaxation step</strong></td>
-                <td>Settling into a more consistent interpretation</td>
-                <td>Rebalancing the inner temple</td>
-                <td>Iterative inference / gradient descent on energy</td>
-              </tr>
-              <tr>
-                <td><strong>Liminality ↑</strong></td>
-                <td>More openness, more volatility</td>
-                <td>Threshold state, rules loosen</td>
-                <td>Higher entropy / weaker priors / broader sampling</td>
-              </tr>
-              <tr>
-                <td><strong>Goal update</strong></td>
-                <td>“What this was really about” changes</td>
-                <td>Reinterpreting the lesson of the ordeal</td>
-                <td>Reappraisal; policy/value shift; label-space movement</td>
-              </tr>
-              <tr>
-                <td><strong>Thought decoding</strong></td>
-                <td>Turning state into language</td>
-                <td>Inner narration emerging from form</td>
-                <td>Decoder conditioned on latent state</td>
-              </tr>
-            </tbody>
-          </table>
-
-          <p class="muted" style="margin-top:12px">
-            If you want reflections that actually reflect the episode: train an <span class="k">episode-level head</span> that reads a sequence of relaxed states and emits a single reflection summary.
-            Right now you decode step-level state. That’s why you sometimes get local correctness without global story.
-          </p>
-        </section>
-
-        <div class="footer">
-          <div><span class="badge" style="border-color:rgba(34,197,94,.5); background: rgba(34,197,94,.10)"><span class="dot" style="background: var(--accent2); box-shadow: 0 0 0 4px rgba(34,197,94,.16)"></span>IDT</span>
-            One theory. Multiple explanations. Same underlying claims.</div>
-          <div>© 2025 Anthony Johnson.</div>
+        <div class="note">
+          IDT does not claim existing frameworks are identical. It claims they share a repeatable motif:
+          latent state dynamics shaped by an objective, expressed through different vocabularies.
         </div>
       </div>
 
-      <aside class="card">
-        <div class="pad">
-          <h2>On-page navigation</h2>
-          <p class="muted" style="margin-top:0">
-            Click to jump. The links work because everything is inside this one file, like a civilized person’s website.
-          </p>
-        </div>
-        <div class="toc" aria-label="Table of contents">
-          <a href="#overview"><strong>Overview</strong><span class="k">#overview</span></a>
-          <a href="#kaleidoscope"><strong>Kaleidoscope</strong><span class="k">#kaleidoscope</span></a>
-          <a href="#metaphysical"><strong>Metaphysical</strong><span class="k">#metaphysical</span></a>
-          <a href="#mathcode"><strong>Math + Code</strong><span class="k">#mathcode</span></a>
-          <a href="#neuroscience"><strong>Neuroscience</strong><span class="k">#neuroscience</span></a>
-          <a href="#definitions"><strong>Definitions</strong><span class="k">#definitions</span></a>
-          <a href="#connections"><strong>Connections</strong><span class="k">#connections</span></a>
-        </div>
-
-        <div class="pad">
-          <div class="panel">
-            <h4>Tip</h4>
-            <p>
-              If you later want multiple pages again, use relative links and a base path. But for now, this avoids path errors permanently.
-            </p>
+      <div class="card">
+        <h2 id="overview">Core Claim</h2>
+        <div class="kvs">
+          <div class="kv">
+            <div class="k">Representation</div>
+            <div class="v">
+              Cognition centers on a compact latent state <b>Z</b> encoding what the system believes is happening.
+            </div>
+          </div>
+          <div class="kv">
+            <div class="k">Dynamics</div>
+            <div class="v">
+              Thought is the iterative update of Z to reduce an objective under inputs and goals.
+            </div>
+          </div>
+          <div class="kv">
+            <div class="k">Understanding</div>
+            <div class="v">
+              Emerges when Z supports prediction, counterfactual simulation, and reliable action selection.
+            </div>
+          </div>
+          <div class="kv">
+            <div class="k">Bridge</div>
+            <div class="v">
+              A shared pattern across learning, inference, and control, written in different languages.
+            </div>
           </div>
         </div>
-      </aside>
+
+        <div class="callout" style="margin-top:12px">
+          <b>Plain reading:</b> Z is the internal world summary, and descent is the mechanism that refines it until it is coherent enough to act.
+        </div>
+      </div>
     </div>
 
-  </div>
+    <section class="grid2">
+      <div class="card" id="definitions">
+        <h2>Definitions</h2>
+        <p class="subhead">
+          IDT becomes real only when the terms are explicit and measurable.
+        </p>
 
-  <script>
-    // Highlight active nav pill based on scroll position (simple + robust).
-    (function(){
-      const pills = Array.from(document.querySelectorAll('.pillbar .pill'));
-      const ids = pills.map(a => a.getAttribute('href')).filter(h => h && h.startsWith('#')).map(h => h.slice(1));
-      const sections = ids.map(id => document.getElementById(id)).filter(Boolean);
+        <div class="kvs" style="margin-top:12px">
+          <div class="kv">
+            <div class="k">Y(t)</div>
+            <div class="v">Observations at time <code>t</code>.</div>
+          </div>
+          <div class="kv">
+            <div class="k">Z(t)</div>
+            <div class="v">Latent state, the belief and world summary.</div>
+          </div>
+          <div class="kv">
+            <div class="k">A(t)</div>
+            <div class="v">Action or output that can alter future observations.</div>
+          </div>
+          <div class="kv">
+            <div class="k">G(t)</div>
+            <div class="v">Goals or constraints that shape what coherence means.</div>
+          </div>
+          <div class="kv">
+            <div class="k">E(Z; Y, G)</div>
+            <div class="v">Objective that measures mismatch, uncertainty, or goal distance.</div>
+          </div>
+          <div class="kv">
+            <div class="k">Descent</div>
+            <div class="v">An update rule that reduces E by adjusting Z, sometimes also A.</div>
+          </div>
+        </div>
 
-      function setActive(id){
-        pills.forEach(a => {
-          const is = a.getAttribute('href') === ('#' + id);
-          a.classList.toggle('active', is);
-        });
-      }
+        <div class="callout cool" style="margin-top:12px">
+          <b>Quiet constraint:</b> every term should have at least one concrete operationalization, even if it is imperfect.
+        </div>
+      </div>
 
-      let ticking = false;
-      window.addEventListener('scroll', () => {
-        if (ticking) return;
-        ticking = true;
-        window.requestAnimationFrame(() => {
-          ticking = false;
-          const y = window.scrollY + 110;
-          let current = sections[0]?.id || 'overview';
-          for (const s of sections){
-            if (s.offsetTop <= y) current = s.id;
-          }
-          setActive(current);
-        });
-      }, {passive:true});
+      <div class="card" id="loops">
+        <h2>Two Loops</h2>
+        <p class="subhead">
+          A clean separation that prevents confusion and forces the theory to be implementable.
+        </p>
 
-      // Init
-      setActive('overview');
-    })();
-  </script>
+        <div class="twocol">
+          <div class="kv">
+            <div class="k">Inference time</div>
+            <div class="v">
+              Parameters are fixed. Z is refined by descent to reduce mismatch under the current observations and goals.
+              This is the inner loop that corresponds to thought.
+            </div>
+          </div>
+
+          <div class="kv">
+            <div class="k">Learning time</div>
+            <div class="v">
+              Parameters change across experiences. The system updates the models that shape energy, prediction, and policy.
+              This is the outer loop that sculpts the landscape thought moves through.
+            </div>
+          </div>
+        </div>
+
+        <div class="callout good" style="margin-top:12px">
+          <b>Interpretation:</b> thought is not gradient descent on parameters. Thought is descent in state space under fixed parameters, plus optional action selection.
+        </div>
+      </div>
+    </section>
+
+    <section class="grid2">
+      <div class="card" id="mapping">
+        <h2>Mapping Across Common Paradigms</h2>
+        <p class="subhead">
+          These correspondences are useful only when you state what matches and what does not.
+        </p>
+
+        <div style="margin-top:12px">
+          <table>
+            <thead>
+              <tr>
+                <th>Paradigm</th>
+                <th>Closest Z</th>
+                <th>Closest Objective</th>
+                <th>Important Difference</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>World models and planning</td>
+                <td>hidden latent state</td>
+                <td>prediction loss and value loss</td>
+                <td>often optimized for return, not for interpretability</td>
+              </tr>
+              <tr>
+                <td>Predictive self supervision</td>
+                <td>predictive embedding</td>
+                <td>representation prediction error</td>
+                <td>may lack an explicit action loop</td>
+              </tr>
+              <tr>
+                <td>Reasoning traces</td>
+                <td>implicit scratch state</td>
+                <td>reduce inconsistency under constraints</td>
+                <td>can be token level rather than dynamical state</td>
+              </tr>
+              <tr>
+                <td>Belief based control</td>
+                <td>posterior belief state</td>
+                <td>free energy like objectives</td>
+                <td>formal probability assumptions differ by model</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="note">
+          The bridge is the structure, not the slogans.
+        </div>
+      </div>
+
+      <div class="card" id="neuro">
+        <h2>Signals and Correspondences</h2>
+        <p class="subhead">
+          A compact mapping from computational structure to measurable signatures, without turning this into a brain tourism brochure.
+        </p>
+
+        <div style="margin-top:12px">
+          <table>
+            <thead>
+              <tr>
+                <th>Concept</th>
+                <th>In this framework</th>
+                <th>Measurable signature</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Mismatch</td>
+                <td>prediction error term in E</td>
+                <td>error signals, residuals, surprise like metrics</td>
+              </tr>
+              <tr>
+                <td>Attention</td>
+                <td>precision weighting on error terms</td>
+                <td>gain modulation, sensitivity shifts, selective updating</td>
+              </tr>
+              <tr>
+                <td>Effort</td>
+                <td>convergence difficulty in state descent</td>
+                <td>slower settling, larger updates, multi basin behavior</td>
+              </tr>
+              <tr>
+                <td>Rumination</td>
+                <td>repeated descent near shallow minima</td>
+                <td>cycling, low progress, stuck dynamics</td>
+              </tr>
+              <tr>
+                <td>Insight</td>
+                <td>transition to a better basin</td>
+                <td>rapid loss drop, trajectory shift, reduced conflict</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="note">
+          This is not a claim of identity. It is a claim of structural rhyme.
+        </div>
+      </div>
+    </section>
+
+    <section class="card" id="crosswalk">
+      <h2>Cross Lens Definitions</h2>
+      <p class="subhead">
+        The same structure can be read as geometry, cognition, or computation, without changing the underlying claims.
+      </p>
+
+      <div style="margin-top:12px">
+        <table>
+          <thead>
+            <tr>
+              <th>Term</th>
+              <th>Geometric reading</th>
+              <th>Cognitive reading</th>
+              <th>Computational reading</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>State Z</td>
+              <td>point on a manifold in state space</td>
+              <td>current belief and context</td>
+              <td>latent vector used for prediction and control</td>
+            </tr>
+            <tr>
+              <td>Coherence</td>
+              <td>low curvature conflict in trajectories</td>
+              <td>felt consistency and stability</td>
+              <td>low error under constraints and goals</td>
+            </tr>
+            <tr>
+              <td>Dissonance</td>
+              <td>competing basins and unstable gradients</td>
+              <td>conflict, tension, unresolved mismatch</td>
+              <td>high residual error or competing constraints</td>
+            </tr>
+            <tr>
+              <td>Meaning</td>
+              <td>stable attractor structure under perturbation</td>
+              <td>compressible interpretation of experience</td>
+              <td>latent factors that reliably predict outcomes</td>
+            </tr>
+            <tr>
+              <td>Liminality</td>
+              <td>boundary region between attractors</td>
+              <td>high plasticity and reframing</td>
+              <td>increased exploration or reduced precision gating</td>
+            </tr>
+            <tr>
+              <td>Reflection</td>
+              <td>return trajectory with updated constraints</td>
+              <td>reappraisal and integration</td>
+              <td>post episode update to goals and priors</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout" style="margin-top:12px">
+        <b>Guardrail:</b> if a term cannot be translated into a measurement or a code path, it is poetry. Keep poetry, but label it as poetry.
+      </div>
+    </section>
+
+    <section class="card" id="mathcode">
+      <h2>Math and Code</h2>
+      <p class="subhead">
+        Minimal skeleton. Make it concrete and the rest becomes testable.
+      </p>
+
+      <pre><code># Signals
+#   Y(t) observations
+#   Z(t) latent state
+#   G(t) goals or constraints
+
+# Models
+#   g_phi predictor or decoder
+#   goal_distance constraint term
+#   pi policy
+
+Y_hat = g_phi(Z)
+
+E(Z; Y, G) = ||Y - Y_hat||^2 + lambda * goal_distance(Z, G)
+
+# Inference time inner loop thought update
+Z = Z - alpha * dE_dZ
+
+# Optional action selection
+A = pi(Z, G)</code></pre>
+
+      <div class="twocol">
+        <div class="callout cool" style="margin-top:12px">
+          <b>Inference time:</b> repeat the Z update until the objective stabilizes or time runs out.
+        </div>
+        <div class="callout good" style="margin-top:12px">
+          <b>Learning time:</b> update parameters of g_phi and pi across many episodes, using the errors produced by the inner loop.
+        </div>
+      </div>
+    </section>
+
+    <section class="grid2">
+      <div class="card" id="predictions">
+        <h2>Predictions</h2>
+        <p class="subhead">
+          Replace these with claims you are willing to be wrong about.
+        </p>
+        <ul style="margin:12px 0 0; color:var(--muted)">
+          <li>Explicit Z update loops improve robustness under distribution shift.</li>
+          <li>Difficult cognition corresponds to slower convergence or competing basins in the objective.</li>
+          <li>Counterfactual rollouts from Z predict outcomes better than surface heuristics.</li>
+          <li>Changing goals reshapes the descent path under the same observations.</li>
+          <li>Precision weighting predicts when attention amplifies or suppresses updates to Z.</li>
+        </ul>
+      </div>
+
+      <div class="card" id="build">
+        <h2>Implementation Directions</h2>
+        <p class="subhead">
+          Suggestions, not commandments. The point is to make the theory buildable.
+        </p>
+
+        <div class="kvs" style="margin-top:12px">
+          <div class="kv">
+            <div class="k">Reflection head</div>
+            <div class="v">
+              Add a module that summarizes an episode and updates constraints or priors, separate from the moment to moment inference loop.
+            </div>
+          </div>
+          <div class="kv">
+            <div class="k">Contrastive structure</div>
+            <div class="v">
+              Use contrastive objectives to encourage Z to separate stable factors from incidental noise across contexts.
+            </div>
+          </div>
+          <div class="kv">
+            <div class="k">Attribution logging</div>
+            <div class="v">
+              Log which terms dominated E during descent, so you can audit what the system is responding to.
+            </div>
+          </div>
+          <div class="kv">
+            <div class="k">Two speed memory</div>
+            <div class="v">
+              Maintain a fast short term state for immediate coherence and a slower contextual state that shifts across episodes.
+            </div>
+          </div>
+          <div class="kv">
+            <div class="k">Goal modulation</div>
+            <div class="v">
+              Implement G as explicit constraints that reshape descent, not as vague prompting that disappears into tokens.
+            </div>
+          </div>
+          <div class="kv">
+            <div class="k">Diagnostics</div>
+            <div class="v">
+              Track convergence rate, basin switching events, and residual mismatch so prediction becomes measurable, not rhetorical.
+            </div>
+          </div>
+        </div>
+
+        <div class="callout" style="margin-top:12px">
+          <b>Outcome:</b> a system that can settle into a coherent internal state, explain what forced the settling, and then choose actions that preserve coherence under uncertainty.
+        </div>
+      </div>
+    </section>
+
+    <section class="card" id="resources">
+      <h2>Links</h2>
+      <p class="subhead">
+        Keep links short and stable.
+      </p>
+
+      <div class="kvs" style="margin-top:12px">
+        <div class="kv">
+          <div class="k">Definitions page</div>
+          <div class="v"><a href="./pages/definitions.html">pages/definitions.html</a></div>
+        </div>
+        <div class="kv">
+          <div class="k">Connections page</div>
+          <div class="v"><a href="./pages/connections.html">pages/connections.html</a></div>
+        </div>
+        <div class="kv">
+          <div class="k">Math and code section</div>
+          <div class="v"><a href="#mathcode">Math and code</a></div>
+        </div>
+        <div class="kv">
+          <div class="k">Implementation section</div>
+          <div class="v"><a href="#build">Implementation directions</a></div>
+        </div>
+      </div>
+
+      <div class="note">
+        If you want the site to feel like a coherent project, keep the index minimal and move long expansions to the pages folder.
+      </div>
+    </section>
+
+    <footer>
+      <div class="footerRow">
+        <div><span class="badge">IDT</span> A compact way to express the same idea across lenses without changing the underlying claims.</div>
+        <div class="smalllinks">
+          <a href="#overview">Top</a>
+          <span style="opacity:.55"> · </span>
+          <a href="#definitions">Definitions</a>
+          <span style="opacity:.55"> · </span>
+          <a href="#crosswalk">Cross lens table</a>
+          <span style="opacity:.55"> · </span>
+          <a href="#build">Implementation</a>
+        </div>
+      </div>
+    </footer>
+  </main>
 </body>
 </html>
