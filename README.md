@@ -21,7 +21,7 @@ The theory is metaphysical in origin but formally expressed, with the intent tha
 ## Repository Contents
 This repository contains theoretical documents, conceptual notes, and early structural definitions related to Image Dynamics Theory. The work is ongoing and should be considered a living framework rather than a finalized model.
 
-See `index.md` for a structured overview of the contents.
+See `index.html` for a structured overview of the contents.
 
 ## Intended Use
 This work is shared for research, educational, and non-commercial purposes. Commercial use, including integration into proprietary systems or paid services, requires explicit permission from the author.
