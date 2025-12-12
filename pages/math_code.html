@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Image Dynamics Theory</title>
+  <link rel="stylesheet" href="/assets/styles.css"/>
+</head>
+<body>
+  <div class="nav">
+    <div class="nav-inner">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <div class="brand-title">Image Dynamics Theory</div>
+          <div class="kicker">a geometric story of mind</div>
+        </div>
+      </div>
+      <div class="nav-links">
+        <a class="pill" data-nav href="/index.html">Home</a>
+<a class="pill" data-nav href="/pages/kaleidoscope.html">Kaleidoscope</a>
+<a class="pill" data-nav href="/pages/metaphysical.html">Metaphysical</a>
+<a class="pill" data-nav href="/pages/math_code.html">Math + Code</a>
+<a class="pill" data-nav href="/pages/neuroscience.html">Neuroscience</a>
+<a class="pill" data-nav href="/pages/definitions.html">Definitions</a>
+<a class="pill" data-nav href="/pages/connections.html">Connections</a>
+      </div>
+    </div>
+  </div>
+
+  <main class="container">
+    <section class="hero">
+  <div class="kicker">Math + code lens</div>
+  <div class="h1">Energy minimization, learned geometry, reflection decoding.</div>
+  <p class="sub">
+    This lens matches your prototype: state vectors, an energy functional, gradient flow (microslices), and losses for prediction, goal revision, and reflection.
+  </p>
+</section>
+
+<section class="section">
+  <h2>State</h2>
+  <div class="code">Z = { per, sem, rel, act, slow, fast, phi }</div>
+  <p class="sub">
+    per aligns to x_t, sem aligns to x_{t+1}, act aligns to y_intended. Relational heads bind structure; slow/fast separate context from fluctuation.
+  </p>
+</section>
+
+<section class="section">
+  <h2>Energy</h2>
+  <div class="code">E(Z; x_t, x_tp1, y) =
+  w_per * ||per - x_t||^2
++ w_sem * ||sem - x_tp1||^2
++ w_act * ||act - y||^2
++ w_sf  * ||slow - fast||^2
++ w_rel * ||rel - W(sem)||^2
++ w_phi * ||phi - mean(phi)||^2
++ w_reg * ||Z||^2</div>
+</section>
+
+<section class="section">
+  <h2>Microslice update</h2>
+  <div class="code">Z_{k+1} = Z_k - dt * grad_Z E(Z_k; x_t, x_tp1, y)</div>
+  <p class="sub">Your <kbd>mind.step</kbd> does this by packing Z into a flat tensor and using autograd.</p>
+</section>
+
+<section class="section">
+  <h2>Learning objectives</h2>
+  <div class="code">L_world: ||world_predict(Z, y) - x_tp1||^2
+L_goal : ||propose_goal_update(Z, y_init) - y_revised||^2
+L_dec  : CrossEntropy(decode(Z["sem"]) -> reflection)
+
+L_total = L_world + alpha*L_dec + beta*L_goal</div>
+</section>
+
+<section class="section">
+  <h2>Making reflections episode-aware</h2>
+  <div class="callout">
+    If you want reflections that summarize the <b>episode</b> (not just the current step), the decoder needs an episode memory vector.
+    Minimal: build a running context c that pools prior step states within the same episode_id, then condition decoding on [Z_sem ; c].
+  </div>
+</section>
+    <div class="footer">
+      <div><span class="badge">IDT</span> This site is meant to explain the same idea through different lenses without changing the underlying claims.</div>
+      <div>© 2025 Anthony Johnson.</div>
+    </div>
+  </main>
+
+  <script src="/assets/site.js"></script>
+</body>
+</html>
